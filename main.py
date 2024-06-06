@@ -10,7 +10,8 @@ from lib.actions.service_detection import service_detection
 
 
 # This script should ultimately perform a few important functions
-# 1. Execute a basic host discovery phase # 2. Scan for the top 2 ports on each known host
+# 1. Execute a basic host discovery phase
+# 2. Scan for the top 2 ports on each known host
 # 3. Scan for the top 10 ports on each known host
 # 4. Scan for the top 100 ports on each known host # 5. Scan for the top 1000 ports on each known host
 # 6. Scan for all ports on each known host
