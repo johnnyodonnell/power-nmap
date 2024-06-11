@@ -2,11 +2,22 @@
 def always_true(host):
     return True
 
-def get_remaining_hosts(current_state):
-    stage = current_state["stage"]
+def generate_port_not_scanned_constraint(port_list):
+    return lambda host:
+        if not "ports_scanned" in host:
+            return True
+
+        ports_scanned = host["ports_scanned"]
+        for port in port_list:
+            if (not port in ports_scanned) or (not ports_scanned[port]):
+                return True
+
+        return False
+
+def get_remaining_hosts(port_list):
     return get_active_hosts(
             current_state,
-            lambda host: ((not "stages_complete" in host) or (not stage in host["stages_complete"]) or (not host["stages_complete"][stage])))
+            generate_port_not_scanned_constraint(port_list))
 
 def get_active_hosts(current_state, additional_constraint = always_true):
     active_hosts = []

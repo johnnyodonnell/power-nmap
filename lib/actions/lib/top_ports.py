@@ -26,7 +26,7 @@ def flatten_ports(ports):
             right_port = port
     flattened_ports.append(
             determine_port_representation(left_port, right_port))
-    return flattened_ports
+    return format_ports(flattened_ports)
 
 def filter_ports(base_array, ports_to_filter):
     filtered_array = []
@@ -34,28 +34,35 @@ def filter_ports(base_array, ports_to_filter):
     for port in base_array:
         if not port in ports_to_filter:
             filtered_array.append(port)
-    return format_ports(flatten_ports(filtered_array))
+    return filtered_array
 
 def get_top_2_ports():
-    return format_ports(top_2_ports)
+    return top_2_ports
 
 def get_top_10_ports():
     return filter_ports(top_10_ports, top_2_ports)
 
+def get_top_30_ports():
+    return filter_ports(top_30_ports, top_2_ports + top_10_ports)
+
 def get_top_100_ports():
-    return filter_ports(top_100_ports, top_2_ports + top_10_ports)
+    return filter_ports(top_100_ports, top_2_ports + top_10_ports + top_30_ports)
 
 def get_top_1000_ports():
-    return filter_ports(top_1000_ports, top_2_ports + top_10_ports + top_100_ports)
+    return filter_ports(top_1000_ports, top_2_ports + top_10_ports + top_30_ports + top_100_ports)
 
 def get_remaining_ports():
     all_ports = list(range(1, 65536))
-    return filter_ports(all_ports, top_2_ports + top_10_ports + top_100_ports + top_1000_ports)
+    return filter_ports(all_ports, top_2_ports + top_10_ports + top_30_ports + top_100_ports + top_1000_ports)
 
 
 # Top ports are based on my own experience
 top_2_ports = [80, 443]
 top_10_ports = [21, 22, 80, 443, 445, 3306, 5432, 6379, 8080, 8443]
+
+# Top 30 ports based on Nessus default
+# https://community.tenable.com/s/article/What-ports-does-built-in-represent?language=en_US
+top_30_ports = [21, 22, 23, 25, 53, 79, 80, 111, 135, 139, 161, 443, 445, 497, 515, 548, 993, 1025, 1028, 1029, 1917, 2869, 3306, 5000, 6000, 8080, 8443, 9001, 9100, 49000]
 
 # Top ports based on nmap's recommendation
 # Command used to get ports: `nmap --top-ports 100 localhost -v -oG -`

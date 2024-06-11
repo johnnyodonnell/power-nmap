@@ -15,12 +15,13 @@ class ReadOutputThread(threading.Thread):
     """Thread class with a stop() method. The thread itself has to check
     regularly for the stopped() condition."""
 
-    def __init__(self, output_filename, current_state):
+    def __init__(self, output_filename, current_state, port_list):
         # https://stackoverflow.com/a/11816038
         super(ReadOutputThread, self).__init__(daemon=True)
 
         self.output_filename = output_filename
         self.current_state = current_state
+        self.port_list = port_list
         self._stop_event = threading.Event()
 
     def stop(self):
@@ -33,17 +34,23 @@ class ReadOutputThread(threading.Thread):
         while not self.stopped():
             if os.path.isfile(self.output_filename):
                 try:
-                    copy_output_to_state(self.output_filename, self.current_state)
+                    copy_output_to_state(
+                            self.output_filename,
+                            self.current_state,
+                            self.port_list)
                 except Exception as e:
                     print("Error copying output to state")
                     print(e)
             time.sleep(5)
-        copy_output_to_state(self.output_filename, self.current_state)
+        copy_output_to_state(
+                self.output_filename,
+                self.current_state,
+                self.port_list)
         print("Scan output processed")
 
 
-def run_scan(args, target, output_filename, current_state):
-    read_output = ReadOutputThread(output_filename, current_state)
+def run_scan(args, target, output_filename, current_state, port_list = []):
+    read_output = ReadOutputThread(output_filename, current_state, port_list)
     read_output.start()
 
     command = [
@@ -61,7 +68,7 @@ def run_scan(args, target, output_filename, current_state):
     read_output.stop()
     read_output.join()
 
-def process_host(current_stage, host_map, host):
+def process_host(port_list, host_map, host):
     address = host.find("address").get("addr")
 
     state = host.find("status").get("state")
@@ -70,9 +77,10 @@ def process_host(current_stage, host_map, host):
             host_map[address] = {}
         host_map[address]["status"] = "up"
 
-        if not "stages_complete" in host_map[address]:
-            host_map[address]["stages_complete"] = {}
-        host_map[address]["stages_complete"][current_stage] = True
+        if not "ports_scanned" in host_map[address]:
+            host_map[address]["ports_scanned"] = {}
+        for port in port_list:
+            host_map[address]["ports_scanned"][port] = True
 
     ports = host.find("ports")
     if ports is not None:
@@ -99,7 +107,7 @@ def process_host(current_stage, host_map, host):
                         }
                 host_map[address]["ports"]["tcp"][portid]["service"] = service_info
 
-def copy_output_to_state(output_filename, current_state):
+def copy_output_to_state(output_filename, current_state, port_list):
     if not "hosts" in current_state:
         current_state["hosts"] = {}
 
@@ -112,9 +120,9 @@ def copy_output_to_state(output_filename, current_state):
         tree = ET.fromstring(xml)
         hosthints = tree.findall("hosthint")
         for hosthint in hosthints:
-            process_host("hosthint", host_map, hosthint)
+            process_host([], host_map, hosthint)
         hosts = tree.findall("host")
         for host in hosts:
-            process_host(current_state["stage"], host_map, host)
+            process_host(port_list, host_map, host)
     save_state(current_state)
 
