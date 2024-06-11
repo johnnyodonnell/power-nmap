@@ -11,7 +11,7 @@ def scan_top_100_ports(current_state):
                 "-Pn", "-p", flatten_ports(port_list),
                 "-oX", output_filename,
                 ],
-            get_remaining_hosts(current_state),
+            get_remaining_hosts(current_state, port_list),
             output_filename,
             current_state,
             port_list)

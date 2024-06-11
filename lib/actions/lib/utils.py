@@ -3,7 +3,7 @@ def always_true(host):
     return True
 
 def generate_port_not_scanned_constraint(port_list):
-    return lambda host:
+    def constraint(host):
         if not "ports_scanned" in host:
             return True
 
@@ -13,8 +13,9 @@ def generate_port_not_scanned_constraint(port_list):
                 return True
 
         return False
+    return constraint
 
-def get_remaining_hosts(port_list):
+def get_remaining_hosts(current_state, port_list):
     return get_active_hosts(
             current_state,
             generate_port_not_scanned_constraint(port_list))

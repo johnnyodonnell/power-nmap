@@ -8,7 +8,7 @@ def scan_top_10_ports(current_state):
     port_list = get_top_10_ports()
     run_scan(
             ["-Pn", "-p", flatten_ports(port_list), "-oX", output_filename],
-            get_remaining_hosts(current_state),
+            get_remaining_hosts(current_state, port_list),
             output_filename,
             current_state,
             port_list)

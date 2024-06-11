@@ -12,7 +12,7 @@ def scan_all_ports(current_state):
                 "-oX", output_filename,
                 "--max-hostgroup", "4"
                 ],
-            get_remaining_hosts(current_state),
+            get_remaining_hosts(current_state, port_list),
             output_filename,
             current_state,
             port_list)
