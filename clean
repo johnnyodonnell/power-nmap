@@ -2,6 +2,8 @@
 
 sudo rm current_state.json
 sudo rm top_*_ports.xml
+sudo rm discover_top_*_ports.xml
+sudo rm discover_and_scan_top_*_ports.xml
 sudo rm all_ports.xml
 sudo rm service_detection*.xml
 

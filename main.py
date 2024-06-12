@@ -4,6 +4,8 @@ from lib.state import read_state, save_state
 from lib.actions.discover_and_scan_top_2_ports import discover_and_scan_top_2_ports
 from lib.actions.discover_top_10_ports import discover_top_10_ports
 from lib.actions.discover_top_30_ports import discover_top_30_ports
+from lib.actions.discover_top_100_ports import discover_top_100_ports
+from lib.actions.discover_top_1000_ports import discover_top_1000_ports
 from lib.actions.scan_top_10_ports import scan_top_10_ports
 from lib.actions.scan_top_100_ports import scan_top_100_ports
 from lib.actions.scan_top_1000_ports import scan_top_1000_ports
@@ -18,18 +20,23 @@ action_order = [
         service_detection,
         scan_top_1000_ports,
         service_detection,
+
         discover_top_10_ports,
-        scan_top_10_ports,
-        scan_top_100_ports,
-        service_detection,
         scan_top_1000_ports,
         service_detection,
+
         discover_top_30_ports,
-        scan_top_10_ports,
-        scan_top_100_ports,
-        service_detection,
         scan_top_1000_ports,
         service_detection,
+
+        discover_top_100_ports,
+        scan_top_1000_ports,
+        service_detection,
+
+        discover_top_1000_ports,
+        scan_top_1000_ports,
+        service_detection,
+
         scan_all_ports,
         service_detection,
         ]
