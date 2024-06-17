@@ -100,12 +100,17 @@ def process_host(port_list, host_map, host):
                     host_map[address]["ports"]["tcp"][portid]["state"] = state
             service = port.find("service")
             if service is not None:
-                service_info = {
-                        "name": service.get("name"),
-                        "product": service.get("product"),
-                        "version": service.get("version"),
-                        }
-                host_map[address]["ports"]["tcp"][portid]["service"] = service_info
+                if not "service" in host_map[address]["ports"]["tcp"][portid]:
+                    host_map[address]["ports"]["tcp"][portid]["service"] = {}
+                name = service.get("name")
+                product = service.get("product")
+                version = service.get("version")
+                if name is not None:
+                    host_map[address]["ports"]["tcp"][portid]["service"]["name"] = name
+                if product is not None:
+                    host_map[address]["ports"]["tcp"][portid]["service"]["product"] = product
+                if version is not None:
+                    host_map[address]["ports"]["tcp"][portid]["service"]["version"] = version
 
 def copy_output_to_state(output_filename, current_state, port_list):
     if not "hosts" in current_state:
