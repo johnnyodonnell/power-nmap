@@ -53,11 +53,11 @@ def main():
                         port_map["id"] = portid
                         if ("service" in port):
                             service = port["service"]
-                            if "name" in serivce:
+                            if "name" in service:
                                 port_map["name"] = service["name"]
-                            if "product" in serivce:
+                            if "product" in service:
                                 port_map["product"] = service["product"]
-                            if "version" in serivce:
+                            if "version" in service:
                                 port_map["version"] = service["version"]
 
     host_list = sorted(host_list, key=num_of_ports)
