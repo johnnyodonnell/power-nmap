@@ -6,6 +6,7 @@ def discover_top_2_ports(current_state):
     output_filename = "discover_top_2_ports.xml"
     run_scan(
             [
+                "-sn",
                 "-PS" + flatten_ports(get_top_2_ports()),
                 "-oX", output_filename
                 ],

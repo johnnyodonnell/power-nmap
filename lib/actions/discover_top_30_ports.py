@@ -6,11 +6,13 @@ def discover_top_30_ports(current_state):
     output_filename = "discover_top_30_ports.xml"
     run_scan(
             [
+                "-sn",
                 "-PS" + flatten_ports(get_top_30_ports()),
                 "-oX", output_filename
                 ],
             current_state["target"],
             output_filename,
             current_state)
+
 
 
