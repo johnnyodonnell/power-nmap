@@ -1,6 +1,8 @@
 
 Todo:
-    1. -
+    - Handle situation when file writing takes multiple seconds to complete
+    - Make sure that file writing completes even after a Ctrl-C
+    - Compress the `current_state` object before storing on filesystem
 
 Done:
     - Group hosts by port so that service detection can be done in bulk
